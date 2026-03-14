@@ -1,12 +1,12 @@
 const { SlashCommandBuilder } = require('discord.js');
 const wednesdayJson = require('../../data/wednesday.json');
-const dayOfWeekName = new Date().toLocaleString('en-US', { weekday: 'long' });
 const wednesday = 'WEDNESDAY';
 
 module.exports = {
-    global: true,
-	data : new SlashCommandBuilder().setName('day').setDescription('Return today\'s day'),
+	global: true,
+	data: new SlashCommandBuilder().setName('day').setDescription('Return today\'s day'),
 	async execute(interaction) {
+		const dayOfWeekName = new Date().toLocaleString('en-US', { weekday: 'long' });
 		console.log(`Day is ${dayOfWeekName}`);
 
 		if (dayOfWeekName.toUpperCase() === wednesday) {
