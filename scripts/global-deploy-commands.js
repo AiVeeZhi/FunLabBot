@@ -1,4 +1,4 @@
-//deploy all commands in command folder and subfolders to a server
+// deploy all commands in command folder and subfolders to a server
 
 require('dotenv').config();
 
@@ -21,7 +21,7 @@ for (const folder of commandFolders) {
 		const filePath = path.join(commandsPath, file);
 		const command = require(filePath);
 		if ('data' in command && 'execute' in command) {
-			//Only deploy if global flag is true
+			// Only deploy if global flag is true
 			if (command.global === true) {
 				commands.push(command.data.toJSON());
 			} else {
