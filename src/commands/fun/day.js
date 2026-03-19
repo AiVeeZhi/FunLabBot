@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+const { getRandomInt } = require('../../util/helpers.js');
 const wednesdayJson = require('../../data/wednesday.json');
 const wednesday = 'WEDNESDAY';
 
@@ -21,14 +22,9 @@ module.exports = {
 	},
 	getRandomWednesdayURL() {
 		const max = wednesdayJson.data.children.length - 1;
-		const randomNumber = module.exports.getRandomInt(0, max);
+		const randomNumber = getRandomInt(0, max);
 		console.log(randomNumber);
 		const child = wednesdayJson.data.children[randomNumber].data;
 		return child.url_overridden_by_dest || child.url;
-	},
-	getRandomInt(min, max) {
-		min = Math.ceil(min);
-		max = Math.floor(max);
-		return Math.floor(Math.random() * (max - min + 1)) + min;
 	},
 };
