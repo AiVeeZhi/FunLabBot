@@ -17,7 +17,7 @@ const data = new SlashCommandBuilder().setName('drg').setDescription('Get\'s Dee
 
 function getRandomValue(json) {
     const query = json.trivia || json.salutes || [];
-    if (query.length === 0) return "No data found.";
+    if (query.length === 0) return 'No data found.';
     const max = query.length - 1;
     const randomNumber = getRandomInt(0, max);
     return query[randomNumber];
@@ -35,8 +35,8 @@ async function sendDeepDive(json) {
     for (const variant of json.variants) {
         // Variant Header Section
         components.push(
-            new TextDisplayBuilder().
-                setContent(`## ${variant.type}: ${variant.name}\n**Biome:** ${variant.biome}`)
+            new TextDisplayBuilder()
+            .setContent(`## ${variant.type}: ${variant.name}\n**Biome:** ${variant.biome}`)
         );
 
         // Stages loop
