@@ -17,6 +17,7 @@ async function buildEventModal(action, interaction, eventID) {
     const eventNameInput = new TextInputBuilder()
         .setCustomId('eventName')
         .setStyle(TextInputStyle.Short)
+        .setMaxLength(10)
         .setValue(action === 'edit' ? eventName : '');
 
     const eventNameLabel = new LabelBuilder()
@@ -26,6 +27,7 @@ async function buildEventModal(action, interaction, eventID) {
     const locationInput = new TextInputBuilder()
         .setCustomId('eventLocation')
         .setStyle(TextInputStyle.Short)
+        .setMaxLength(100)
         .setValue(action === 'edit' ? eventLocation : '');
 
     const locationLabel = new LabelBuilder()
@@ -37,6 +39,7 @@ async function buildEventModal(action, interaction, eventID) {
         .setCustomId('eventStartDate')
         .setPlaceholder('5/2 at 3:30pm')
         .setStyle(TextInputStyle.Short)
+        .setMaxLength(25)
         .setValue(action === 'edit' ? startDateText : '');
 
     const startDateLabel = new LabelBuilder()
@@ -48,6 +51,7 @@ async function buildEventModal(action, interaction, eventID) {
         .setCustomId('eventEndDate')
         .setPlaceholder('11/23 @ 11am')
         .setStyle(TextInputStyle.Short)
+        .setMaxLength(25)
         .setValue(action === 'edit' ? endDateText : '');
 
     const endDateLabel = new LabelBuilder()
@@ -58,6 +62,7 @@ async function buildEventModal(action, interaction, eventID) {
     const descriptionInput = new TextInputBuilder()
         .setCustomId('eventDescription')
         .setStyle(TextInputStyle.Paragraph)
+        .setMaxLength(1000)
         .setRequired(false)
         .setValue(action === 'edit' ? eventDescription : '');
 
