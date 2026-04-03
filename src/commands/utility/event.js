@@ -66,6 +66,7 @@ async function startEventActionFlow(interaction, action) {
                 console.log(`Selected Event ID: ${selectedEventId}`);
                 const modal = await buildEventModal(actions.EDIT, i, selectedEventId);
                 await i.showModal(modal);
+                await interaction.deleteReply();
                 collector.stop();
             } else if (i.customId === 'cancelEventButton') {
                 const guild = interaction.client.guilds.cache.get(interaction.guildId);
