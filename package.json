@@ -16,6 +16,7 @@
     "balanced-match": "^4.0.4",
     "brace-expansion": "^5.0.4",
     "cross-spawn": "^7.0.6",
+    "dayjs": "^1.11.20",
     "debug": "^4.4.3",
     "deep-is": "^0.1.4",
     "discord.js": "^14.25.1",
