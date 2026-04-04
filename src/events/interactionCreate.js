@@ -72,7 +72,7 @@ module.exports = {
 					console.log(`Start Time format: ${startDateString} :` + isValidDateTimeInput(startDateString));
 					console.log(`End Time format: ${endDateString} :` + isValidDateTimeInput(endDateString));
 					return interaction.reply({
-						content: 'Invalid date time format! Use MM/DD/YYYY @ HH:MMam/pm',
+						content: 'Invalid date time format! Use `MM/DD HH:MMam/pm` or `MM/DD/YYYY HH:MMam/pm` (e.g. `5/2 3:30pm` or `11/23/2026 11am`). Assumes CST.',
 						flags: MessageFlags.Ephemeral
 					})
 				}
