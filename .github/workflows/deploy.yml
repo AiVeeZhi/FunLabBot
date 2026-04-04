@@ -17,7 +17,7 @@ jobs:
             cd FunLabBot
             git pull origin main
             npm install
-            node guild-deploy-commands.js
+            node scripts/guild-deploy-commands.js
             pm2 restart FunLabBot
 
             
