@@ -1,0 +1,23 @@
+name: Manual Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  manual-task:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.OCI_HOST }}
+          username: ${{ secrets.OCI_USER }}
+          key: ${{ secrets.OCI_SSH_KEY }}
+          script: |
+            cd FunLabBot
+            git pull origin main
+            npm install
+            node guild-deploy-commands.js
+            pm2 restart FunLabBot
+
+            
