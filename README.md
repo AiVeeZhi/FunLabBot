@@ -25,7 +25,7 @@ A Discord bot built with Node.js and discord.js.
      ```env
      BOT_TOKEN=INSERT_DISCORD_BOT_TOKEN
      clientId=INSTERT_CLIENT_ID
-     guildID=INSERT_SERVER_ID
+     guildId=INSERT_SERVER_ID
      ```
 
 ## Deploying Commands
