@@ -25,7 +25,6 @@ function parseCSTDate(input) {
 
 function isValidDateTimeInput(input) {
     return dayjs(input, formats).isValid();
-    //return formatRegex.test(input);
 }
 
 module.exports = {
