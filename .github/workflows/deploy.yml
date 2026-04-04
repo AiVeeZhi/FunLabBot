@@ -1,6 +1,5 @@
 name: Manual Deploy
 
-# This "on" section enables the manual trigger
 on:
   workflow_dispatch:
 
