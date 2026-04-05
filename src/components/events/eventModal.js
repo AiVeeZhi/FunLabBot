@@ -17,7 +17,7 @@ async function buildEventModal(action, interaction, eventID) {
     const eventNameInput = new TextInputBuilder()
         .setCustomId('eventName')
         .setStyle(TextInputStyle.Short)
-        .setMaxLength(10)
+        .setMaxLength(25)
         .setValue(action === 'edit' ? eventName : '');
 
     const eventNameLabel = new LabelBuilder()
