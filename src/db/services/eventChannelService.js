@@ -7,7 +7,7 @@ const EventChannel = require('../models/EventChannel.js');
  * @param {import('discord.js').Guild} guild The Discord guild object
  * @returns {Promise<import('discord.js').TextChannel | import('discord.js').NewsChannel | null>}
  */
-async function getEventAnnouncementChannel(guild) {
+async function getAnnouncementChannel(guild) {
     const eventChannel = await EventChannel.findOne({ guildId: guild.id });
 
     if (eventChannel) {
@@ -23,4 +23,27 @@ async function getEventAnnouncementChannel(guild) {
     return guild.systemChannel || null;
 }
 
-module.exports = { getEventAnnouncementChannel };
+async function setAnnouncementChannel(guild, channel) {
+
+    try {
+       const result = await EventChannel.findOneAndUpdate(
+            { guildId: guild.id },
+            { 
+                channelId: channel.id,
+                channelName: channel.name
+            },
+            { 
+                upsert: true,
+                returnDocument: 'after',
+                runValidators: true
+             }
+        );
+        console.log(`Successfully updated db ${result}`);
+        return true;
+    } catch (error) {
+         console.error(`Error updating Notification Channel ${channel.id} for guild ${guild.id}:`, error);
+         return false;
+    }
+}
+
+module.exports = { getAnnouncementChannel, setAnnouncementChannel };

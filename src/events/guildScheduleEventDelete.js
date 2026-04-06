@@ -1,13 +1,13 @@
 const { Events } = require('discord.js');
 const {postEventEmbed, EVENTTYPES} = require('../components/events/eventEmbeds.js');
-const { getEventAnnouncementChannel } = require('../db/services/eventChannelService.js');
+const { getAnnouncementChannel } = require('../db/services/eventChannelService.js');
 
 module.exports = {
     name: Events.GuildScheduledEventDelete,
     async execute(guildScheduleEvent) {
         console.log(`Event cancelled: ${guildScheduleEvent.name}`);
 
-        const channel = await getEventAnnouncementChannel(guildScheduleEvent.guild);
+        const channel = await getAnnouncementChannel(guildScheduleEvent.guild);
         console.log(`channel: ${channel}`);
 
         if (channel) {
