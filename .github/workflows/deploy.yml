@@ -18,6 +18,7 @@ jobs:
           script: |
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            export MONGO_URI="${{ secrets.MONGO_URI }}"
             export BOT_TOKEN="${{ secrets.BOT_TOKEN }}"
             export clientId="${{ secrets.DISCORD_CLIENT_ID }}"
             export guildId="${{ secrets.DISCORD_GUILD_ID }}"
@@ -25,4 +26,4 @@ jobs:
             git pull origin main
             npm install
             node scripts/guild-deploy-commands.js
-            pm2 restart FunLabBot
+            pm2 restart FunLabBot --update-env
