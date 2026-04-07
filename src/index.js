@@ -1,12 +1,15 @@
 require('dotenv').config();
 
+//Below may be required on local if having issues connecting to mongoDB
+//const dns = require('node:dns');
+//dns.setServers(['8.8.8.8', '1.1.1.1']);
+
 const fs = require('node:fs');
 const path = require('node:path');
-const {Client, Collection, GatewayIntentBits} = require('discord.js');
-const {BOT_TOKEN} = process.env;
+const { Client, Collection, GatewayIntentBits } = require('discord.js');
+const { BOT_TOKEN } = process.env;
 
-const client = new Client({intents: [GatewayIntentBits.Guilds]});
-
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildScheduledEvents] });
 
 client.commands = new Collection();
 client.cooldowns = new Collection();

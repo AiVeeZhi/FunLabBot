@@ -4,6 +4,13 @@ A Discord bot built with Node.js and discord.js.
 
 ## Requirements
 - [Node.js](https://nodejs.org/en/download/) (v16.9.0 or newer is recommended for discord.js)
+- **Discord Bot Setup**: You will need to create an application in the [Discord Developer Portal](https://discord.com/developers/applications).
+  - `BOT_TOKEN`: Found under your Application > Bot > Reset Token.
+  - `clientId`: Found under your Application > OAuth2 > General > Client ID.
+- **Discord Server**:
+  - `guildId`: The ID of the Discord server you want to test in. You can get this by enabling Developer Mode in your Discord client settings, right-clicking the server icon, and selecting "Copy Server ID".
+- **MongoDB Database**:
+  - `MONGO_URI`: The connection string for your MongoDB database (e.g. from MongoDB Atlas).
 
 ## Setup
 
@@ -24,8 +31,9 @@ A Discord bot built with Node.js and discord.js.
    - Open `.env` and fill in your app details:
      ```env
      BOT_TOKEN=INSERT_DISCORD_BOT_TOKEN
-     clientId=INSTERT_CLIENT_ID
+     clientId=INSERT_CLIENT_ID
      guildId=INSERT_SERVER_ID
+     MONGO_URI=INSERT_MONGO_URI
      ```
 
 ## Deploying Commands
