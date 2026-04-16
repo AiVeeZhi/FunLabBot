@@ -1,9 +1,10 @@
-const { SlashCommandBuilder, PermissionFlagsBits, ChannelType, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, ChannelType, MessageFlags, InteractionContextType } = require('discord.js');
 const { setAnnouncementChannel } = require('../../db/services/eventChannelService.js');
 
 const data = new SlashCommandBuilder()
     .setName('set-notifications')
     .setDescription('Set the channel to send notifications to')
+    .setContexts(InteractionContextType.Guild)
     .addChannelOption((option) => option
         .setName('channel')
         .setDescription('the channel to send notifications to')
@@ -12,6 +13,7 @@ const data = new SlashCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator);
 
 module.exports = {
+    global:true,
     data: data,
     async execute(interaction) {
         const channel = interaction.options.getChannel('channel');
