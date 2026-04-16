@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags, InteractionContextType } = require('discord.js');
 const { buildEventModal } = require('../../components/events/eventModal.js');
 const { getServerEvents } = require('../../util/serverMethods.js');
 const { buildEventListComponents } = require('../../components/events/eventListSelectMenu.js');
@@ -9,7 +9,7 @@ const actions = Object.freeze({
     CANCEL: 'cancel'
 });
 
-const data = new SlashCommandBuilder().setName('event').setDescription('Create, Modify, Delete Discord Events')
+const data = new SlashCommandBuilder().setName('event').setDescription('Create, Modify, Delete Discord Events').setContexts(InteractionContextType.Guild)
     .addSubcommand(subcommand =>
         subcommand.setName('create').setDescription('Create a Discord event'))
     .addSubcommand(subcommand =>
@@ -103,6 +103,7 @@ async function startEventActionFlow(interaction, action) {
 }
 
 module.exports = {
+    global: true,
     data: data,
     async execute(interaction) {
         switch (interaction.options.getSubcommand()) {

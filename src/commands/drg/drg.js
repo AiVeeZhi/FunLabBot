@@ -61,6 +61,7 @@ async function sendDeepDive(json) {
 }
 
 module.exports = {
+    global: true,
     data: data,
     async execute(interaction) {
         await interaction.deferReply();
