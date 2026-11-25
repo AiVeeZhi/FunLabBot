@@ -1,7 +1,7 @@
-const dayjs = require('dayjs');
-const utc = require('dayjs/plugin/utc');
-const timezone = require('dayjs/plugin/timezone');
-const customParseFormat = require('dayjs/plugin/customParseFormat');
+import dayjs from 'dayjs';
+import utc from'dayjs/plugin/utc';
+import timezone from'dayjs/plugin/timezone';
+import customParseFormat from'dayjs/plugin/customParseFormat';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -16,18 +16,13 @@ const formats = [
         "M/DH"
     ];
 
-function parseCSTDate(input) {
+export function parseCSTDate(input: string): string {
 
     const date = dayjs(input.toUpperCase(), formats).tz("America/Chicago", true);
     console.log(date);
     return date.utc().format("YYYY-MM-DDTHH:mm:ss[Z]");
 }
 
-function isValidDateTimeInput(input) {
+export function isValidDateTimeInput(input: string): boolean {
     return dayjs(input, formats).isValid();
-}
-
-module.exports = {
-    isValidDateTimeInput,
-    parseCSTDate
 }
