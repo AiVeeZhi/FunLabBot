@@ -12,7 +12,8 @@ const formats = [
         "M/D/YYYYhA",
         "M/Dh:mmA",
         "M/DhA",
-        "M/D/YYYYH:mm", // Matches military if am/pm is missing
+        // Matches military if am/pm is missing
+        "M/D/YYYYH:mm",
         "M/DH"
     ];
 
