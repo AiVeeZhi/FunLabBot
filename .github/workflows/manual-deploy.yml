@@ -23,6 +23,7 @@ jobs:
             cd FunLabBot
             git pull origin main
             npm install
-            node scripts/guild-deploy-commands.js
-            node scripts/global-deploy-commands.js
+            npm run build
+            npm run deploy:guild
+            npm run deploy:global
             pm2 restart FunLabBot --update-env
