@@ -1,6 +1,6 @@
 # FunLabBot
 
-A Discord bot built with Node.js and discord.js.
+A Discord bot built with TypeScript, Node.js, and discord.js.
 
 ## Requirements
 - [Node.js](https://nodejs.org/en/download/) (v16.9.0 or newer is recommended for discord.js)
@@ -38,20 +38,41 @@ A Discord bot built with Node.js and discord.js.
 
 ## Deploying Commands
 
-Whenever you add or change slash commands, you need to register them with Discord's API. There are two deployment scripts you can use:
+Whenever you add or change slash commands, you need to register them with Discord's API:
 
 - To deploy commands to a specific server (faster updates, recommended for testing):
   ```bash
-  node scripts/guild-deploy-commands.js
+  npm run deploy:guild
   ```
 - To deploy commands globally (takes up to an hour to update across all servers):
   ```bash
-  node scripts/global-deploy-commands.js
+  npm run deploy:global
+  ```
+- To clear registered commands:
+  ```bash
+  npm run commands:clear
   ```
 
 ## Running the Bot
 
-Once everything is set up, you can start the bot by running:
+### Development Mode
+Runs the bot directly from TypeScript with live reload on file changes:
 ```bash
-node src/index.js
+npm run dev
 ```
+
+### Production Mode
+Compile the TypeScript code to JavaScript and run the output:
+```bash
+# Build the project
+npm run build
+
+# Start the bot
+npm start
+```
+
+## Other Scripts
+
+- **Type check**: `npm run typecheck`
+- **Lint**: `npm run lint`
+
