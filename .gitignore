@@ -10,4 +10,7 @@ jspm_packages/
 .env.*
 !.env.example
 
+#Build output
+dist/
+
 .vscode

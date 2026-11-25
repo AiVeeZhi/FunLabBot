@@ -1,10 +1,18 @@
-const { Events, MessageFlags, Collection, GuildScheduledEventEntityType, GuildScheduledEventPrivacyLevel } = require('discord.js');
-const { isValidDateTimeInput, parseCSTDate } = require('../util/timeUtils.js');
-const { getServerEventById } = require('../util/serverMethods.js');
+import {
+	Collection,
+	Events,
+	GuildScheduledEventEntityType,
+	GuildScheduledEventPrivacyLevel,
+	Interaction,
+	MessageFlags,
+} from 'discord.js';
+import { isValidDateTimeInput, parseCSTDate } from '../util/timeUtils';
+import { getServerEventById } from '../util/serverMethods';
+import { BotEvent } from '../types/event';
 
-module.exports = {
+const event: BotEvent<Events.InteractionCreate> = {
 	name: Events.InteractionCreate,
-	async execute(interaction) {
+	async execute(interaction: Interaction): Promise<void> {
 		if (interaction.isChatInputCommand()) {
 			const command = interaction.client.commands.get(interaction.commandName);
 
@@ -13,10 +21,7 @@ module.exports = {
 				return;
 			}
 
-			const { cooldowns } = interaction.client;
-
-			if (!cooldowns) {
-				// Fallback in case client.cooldowns is missing in index.js
+			if (!interaction.client.cooldowns) {
 				interaction.client.cooldowns = new Collection();
 			}
 
@@ -25,19 +30,20 @@ module.exports = {
 			}
 
 			const now = Date.now();
-			const timestamps = interaction.client.cooldowns.get(command.data.name);
+			const timestamps = interaction.client.cooldowns.get(command.data.name)!;
 			const defaultCooldownDuration = 3;
 			const cooldownAmount = (command.cooldown ?? defaultCooldownDuration) * 1_000;
 
 			if (timestamps.has(interaction.user.id)) {
-				const expirationTime = timestamps.get(interaction.user.id) + cooldownAmount;
+				const expirationTime = timestamps.get(interaction.user.id)! + cooldownAmount;
 
 				if (now < expirationTime) {
 					const expiredTimestamp = Math.round(expirationTime / 1000);
-					return interaction.reply({
+					await interaction.reply({
 						content: `Please wait, you are on a cooldown for \`${command.data.name}\`. You can use it again <t:${expiredTimestamp}:R>.`,
 						flags: MessageFlags.Ephemeral,
 					});
+					return;
 				}
 			}
 
@@ -61,73 +67,89 @@ module.exports = {
 				}
 			}
 		} else if (interaction.isModalSubmit()) {
-			if (interaction.customId.startsWith('editEventModal') || interaction.customId === 'createEventModal') {
+			if (
+				interaction.customId.startsWith('editEventModal') ||
+				interaction.customId === 'createEventModal'
+			) {
 				const name = interaction.fields.getTextInputValue('eventName');
 				const location = interaction.fields.getTextInputValue('eventLocation');
-				const startDateString = interaction.fields.getTextInputValue('eventStartDate').replace(/\s+/g, '');
-				const endDateString = interaction.fields.getTextInputValue('eventEndDate').replace(/\s+/g, '');
+				const startDateString = interaction.fields
+					.getTextInputValue('eventStartDate')
+					.replace(/\s+/g, '');
+				const endDateString = interaction.fields
+					.getTextInputValue('eventEndDate')
+					.replace(/\s+/g, '');
 				const description = interaction.fields.getTextInputValue('eventDescription');
 
 				if (!isValidDateTimeInput(startDateString) || !isValidDateTimeInput(endDateString)) {
-					console.log(`Start Time format: ${startDateString} :` + isValidDateTimeInput(startDateString));
-					console.log(`End Time format: ${endDateString} :` + isValidDateTimeInput(endDateString));
-					return interaction.reply({
-						content: 'Invalid date time format! Use `MM/DD HH:MMam/pm` or `MM/DD/YYYY HH:MMam/pm` (e.g. `5/2 3:30pm` or `11/23/2026 11am`). Assumes CST.',
-						flags: MessageFlags.Ephemeral
-					})
+					console.log(`Start Time format: ${startDateString} : ${isValidDateTimeInput(startDateString)}`);
+					console.log(`End Time format: ${endDateString} : ${isValidDateTimeInput(endDateString)}`);
+					await interaction.reply({
+						content:
+							'Invalid date time format! Use `MM/DD HH:MMam/pm` or `MM/DD/YYYY HH:MMam/pm` (e.g. `5/2 3:30pm` or `11/23/2026 11am`). Assumes CST.',
+						flags: MessageFlags.Ephemeral,
+					});
+					return;
 				}
 
-				// Interpret the user input explicitly as CST/CDT
+				// Interpret user input explicitly as CST
 				const startTime = parseCSTDate(startDateString);
 				console.log(`Start Time: ${startTime}`);
 				const endTime = parseCSTDate(endDateString);
 				console.log(`End Time: ${endTime}`);
 
-
 				if (interaction.customId === 'createEventModal') {
+					if (!interaction.guild) return;
 					try {
-						const event = await interaction.guild.scheduledEvents.create({
-							name: name,
+						const createdEvent = await interaction.guild.scheduledEvents.create({
+							name,
 							scheduledStartTime: startTime,
 							scheduledEndTime: endTime,
 							privacyLevel: GuildScheduledEventPrivacyLevel.GuildOnly,
 							entityType: GuildScheduledEventEntityType.External,
-							entityMetadata: { location: location },
-							description: description,
+							entityMetadata: { location },
+							description,
 						});
 						await interaction.reply({
-							content: `Event **${event.name}** create Sucessfully`,
-							flags: MessageFlags.Ephemeral
-						})
+							content: `Event **${createdEvent.name}** created successfully!`,
+							flags: MessageFlags.Ephemeral,
+						});
 					} catch (error) {
 						console.error(error);
 						await interaction.reply({
 							content: 'Error creating event.',
-							flags: MessageFlags.Ephemeral
+							flags: MessageFlags.Ephemeral,
 						});
 					}
 				} else if (interaction.customId.startsWith('editEventModal')) {
 					try {
 						const eventId = interaction.customId.split('_')[1];
-						const event = await getServerEventById(interaction, eventId);
-						await event.edit({
-							name: name,
+						const existingEvent = await getServerEventById(interaction, eventId);
+						if (!existingEvent) {
+							await interaction.reply({
+								content: 'Event not found.',
+								flags: MessageFlags.Ephemeral,
+							});
+							return;
+						}
+						await existingEvent.edit({
+							name,
 							scheduledStartTime: startTime,
 							scheduledEndTime: endTime,
 							privacyLevel: GuildScheduledEventPrivacyLevel.GuildOnly,
 							entityType: GuildScheduledEventEntityType.External,
-							entityMetadata: { location: location },
-							description: description,
+							entityMetadata: { location },
+							description,
 						});
 						await interaction.reply({
-							content: `Event **${event.name}** updated Sucessfully`,
-							flags: MessageFlags.Ephemeral
+							content: `Event **${existingEvent.name}** updated successfully!`,
+							flags: MessageFlags.Ephemeral,
 						});
 					} catch (error) {
 						console.error(error);
 						await interaction.reply({
 							content: 'Error updating event.',
-							flags: MessageFlags.Ephemeral
+							flags: MessageFlags.Ephemeral,
 						});
 					}
 				}
@@ -135,3 +157,5 @@ module.exports = {
 		}
 	},
 };
+
+export default event;
