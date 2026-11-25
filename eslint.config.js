@@ -4,7 +4,17 @@ const eslintConfigPrettier = require('eslint-config-prettier');
 
 module.exports = tseslint.config(
 	js.configs.recommended,
+	{
+		ignores: ['dist/**'],
+	},
+	js.configs.recommended,
 	...tseslint.configs.recommended,
+	{
+		files: ['eslint.config.js', 'src/index.ts', 'scripts/**/*.ts'],
+		rules: {
+			'@typescript-eslint/no-require-imports': 'off',
+		},
+	},
 	{
 		languageOptions: {
 			ecmaVersion: 'latest',
